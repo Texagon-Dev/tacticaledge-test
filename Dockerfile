@@ -8,7 +8,7 @@ ARG HF_TOKEN
 EXPOSE $PORT
 
 # Set the working directory inside the container
-WORKDIR /backend
+WORKDIR /
 
 # Copy the requirements.txt file into the container
 COPY requirements.txt .
