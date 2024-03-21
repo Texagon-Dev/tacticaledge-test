@@ -27,6 +27,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Specify the default command to run when the container starts
-
-ENTRYPOINT ["streamlit", "run", "interface.py", "--server.address=0.0.0.0"]
-
+EXPOSE 8501
+ENTRYPOINT ["streamlit", "run", "interface.py", "--server.address=0.0.0.0","--server.enableCORS=true"]
