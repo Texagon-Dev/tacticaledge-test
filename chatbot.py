@@ -1,24 +1,29 @@
-from langchain_community.llms import HuggingFaceEndpoint
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+"""This module is designed to chat with LLAMA 2 using RAG."""
 import os
-from langchain.memory import ConversationBufferMemory
-from langchain.vectorstores.base import VectorStoreRetriever
+
+from dotenv import load_dotenv
 from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 from langchain.prompts import (
     ChatPromptTemplate,
-    MessagesPlaceholder,
-    SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
 )
+from langchain.vectorstores.base import VectorStoreRetriever
+from langchain_community.llms import HuggingFaceEndpoint
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
 
-llm = ChatOpenAI(temperature=0 , model="gpt-3.5-turbo" , api_key=os.environ.get("KAMAL_LLM_OPENAI_API_KEY"))
+llm = ChatOpenAI(
+    temperature=0,
+    model="gpt-3.5-turbo",
+    api_key=os.environ.get("KAMAL_LLM_OPENAI_API_KEY"),
+)
 
 
-general_system_template_for_mobily = r""" 
+GENERAL_SYSTEM_TEMPLATE_FOR_MOBILY = r""" 
                
   
                 Role:
@@ -35,7 +40,7 @@ general_system_template_for_mobily = r"""
                 """
 
 
-general_system_template_for_operations_manual = r""" 
+GENERAL_SYSTEM_TEMPLATE_FOR_OPERATIONS_MANUAL = r""" 
                
                 Role:
                 You are a helpful assistant for the Operation and Maintainance Manual. 
@@ -50,29 +55,38 @@ general_system_template_for_operations_manual = r"""
 
                 """
 
-def chatting(user_input, db , id):
 
-    
+def chatting(user_input, db, input_id):
+    """This is the function to chat with the model"""
+
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     general_user_template = "Question:```{question}```"
 
-    if id == 1:
+    if input_id == 1:
         messages = [
-                    SystemMessagePromptTemplate.from_template(general_system_template_for_mobily),
-                    HumanMessagePromptTemplate.from_template(general_user_template)
+            SystemMessagePromptTemplate.from_template(
+                GENERAL_SYSTEM_TEMPLATE_FOR_MOBILY
+            ),
+            HumanMessagePromptTemplate.from_template(general_user_template),
         ]
-    elif id == 2:
+    elif input_id == 2:
         messages = [
-                    SystemMessagePromptTemplate.from_template(general_system_template_for_operations_manual),
-                    HumanMessagePromptTemplate.from_template(general_user_template)
+            SystemMessagePromptTemplate.from_template(
+                GENERAL_SYSTEM_TEMPLATE_FOR_OPERATIONS_MANUAL
+            ),
+            HumanMessagePromptTemplate.from_template(general_user_template),
         ]
 
-    aqa_prompt = ChatPromptTemplate.from_messages( messages )
-    retriever = VectorStoreRetriever(vectorstore=db, search_kwargs={"k":8})
-    conversation = ConversationalRetrievalChain.from_llm(llm, retriever= retriever, memory= memory , combine_docs_chain_kwargs={"prompt":aqa_prompt}, verbose=False)
-    
-    conversation.invoke({'question': user_input})
+    aqa_prompt = ChatPromptTemplate.from_messages(messages)
+    retriever = VectorStoreRetriever(vectorstore=db, search_kwargs={"k": 8})
+    conversation = ConversationalRetrievalChain.from_llm(
+        llm,
+        retriever=retriever,
+        memory=memory,
+        combine_docs_chain_kwargs={"prompt": aqa_prompt},
+        verbose=False,
+    )
+
+    conversation.invoke({"question": user_input})
     # print(memory.buffer)
     return memory.buffer[-1].content
-
-
