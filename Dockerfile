@@ -27,4 +27,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Specify the default command to run when the container starts
-CMD ["sh", "-c", "uvicorn main:app --workers 4 --host 0.0.0.0 --port $PORT"]
+ENTRYPOINT ["streamlit", "run", "interface.py", "--server.port=$PORT", "--server.address=0.0.0.0"]
