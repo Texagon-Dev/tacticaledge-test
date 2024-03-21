@@ -41,20 +41,20 @@ embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def get_db(db_name):
     """Module to get the db connected."""
-    FAISS.allow_dangerous_deserialization = True
+    #FAISS.allow_dangerous_deserialization = True
     if db_name == "mobily":
         db = FAISS.load_local(
-            r"./Embeddings\mobily",
+            r"Embeddings/mobily",
             embeddings,
-            allow_dangerous_deserialization=True,
+            #allow_dangerous_deserialization=True,
         )
 
         return db
     elif db_name == "operation":
         db = FAISS.load_local(
-            r"./Embeddings\operation_and_maintainance",
+            r"Embeddings/operation_and_maintainance",
             embeddings,
-            allow_dangerous_deserialization=True,
+            #allow_dangerous_deserialization=True,
         )
         return db
     return None
