@@ -44,7 +44,7 @@ def get_db(db_name):
     FAISS.allow_dangerous_deserialization = True
     if db_name == "mobily":
         db = FAISS.load_local(
-            r"Embeddings\mobily",
+            r"./Embeddings\mobily",
             embeddings,
             allow_dangerous_deserialization=True,
         )
@@ -52,7 +52,7 @@ def get_db(db_name):
         return db
     elif db_name == "operation":
         db = FAISS.load_local(
-            r"Embeddings\operation_and_maintainance",
+            r"./Embeddings\operation_and_maintainance",
             embeddings,
             allow_dangerous_deserialization=True,
         )
