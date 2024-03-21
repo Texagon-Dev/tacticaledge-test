@@ -1,4 +1,5 @@
-"""This module is designed to chat with LLAMA 2 using RAG."""
+"""This module is designed to chat with LLAMA 2 using RAG and answer queries"""
+#llama2
 import os
 
 from dotenv import load_dotenv
