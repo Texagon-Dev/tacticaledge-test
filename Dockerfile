@@ -8,7 +8,7 @@ ARG HF_TOKEN
 EXPOSE $PORT
 
 # Set the working directory inside the container
-WORKDIR /
+WORKDIR app
 
 # Copy the requirements.txt file into the container
 COPY requirements.txt .
@@ -27,4 +27,4 @@ COPY . .
 
 # Specify the default command to run when the container starts
 EXPOSE $PORT
-CMD ["sh", "-c", "cd / && streamlit run interface.py --server.port $PORT --server.address 0.0.0.0 --server.enableCORS true"]
+CMD ["sh", "-c", "streamlit run interface.py --server.port $PORT --server.address 0.0.0.0 --server.enableCORS true"]
