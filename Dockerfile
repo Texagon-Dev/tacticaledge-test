@@ -1,9 +1,8 @@
 FROM ashokpant/python-3.10-cv
 
 ARG PORT
-ARG OPENAI_API_KEY
-ARG SUPABASE_KEY
-ARG SUPABASE_URL
+ARG ENDPOINT_URL
+ARG HF_TOKEN
 
 # Expose the specified port
 EXPOSE $PORT
