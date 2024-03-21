@@ -11,17 +11,29 @@ from langchain.prompts import (
     SystemMessagePromptTemplate,
 )
 from langchain.vectorstores.base import VectorStoreRetriever
-from langchain_community.llms import HuggingFaceEndpoint
-from langchain_openai import ChatOpenAI
+from langchain_community.llms import HuggingFaceTextGenInference
+
 
 load_dotenv()
 
 
-llm = ChatOpenAI(
-    temperature=0,
-    model="gpt-3.5-turbo",
-    api_key="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"
-    # api_key=os.environ.get("KAMAL_LLM_OPENAI_API_KEY"),
+url= os.getenv("ENDPOINT_URL")
+token = os.getenv("HF_TOKEN")
+
+
+
+llm = HuggingFaceTextGenInference(
+    inference_server_url=url,
+    
+    top_k=50,
+    temperature=0.1,
+    repetition_penalty=1.03,
+    server_kwargs={
+        "headers": {
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+        }
+    },
 )
 
 
@@ -37,7 +49,7 @@ GENERAL_SYSTEM_TEMPLATE_FOR_MOBILY = r"""
                 context = {context}
 
                 output:
-                give the most suitable answer. also markdown your answer.
+                give the most suitable answer.
 
                 """
 
@@ -53,8 +65,7 @@ GENERAL_SYSTEM_TEMPLATE_FOR_OPERATIONS_MANUAL = r"""
                 context = {context}
 
                 output:
-                give the most suitable answer. also markdown your answer.
-
+                give the most suitable answer. 
                 """
 
 
@@ -80,7 +91,7 @@ def chatting(user_input, db, input_id):
         ]
 
     aqa_prompt = ChatPromptTemplate.from_messages(messages)
-    retriever = VectorStoreRetriever(vectorstore=db, search_kwargs={"k": 8})
+    retriever = VectorStoreRetriever(vectorstore=db, search_kwargs={"k": 5})
     conversation = ConversationalRetrievalChain.from_llm(
         llm,
         retriever=retriever,
