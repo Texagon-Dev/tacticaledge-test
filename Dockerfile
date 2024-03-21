@@ -1,4 +1,4 @@
-FROM ashokpant/python-3.10-cv
+FROM ashokpant/python-3.10-slim
 
 ARG PORT
 ARG ENDPOINT_URL
