@@ -20,7 +20,8 @@ load_dotenv()
 llm = ChatOpenAI(
     temperature=0,
     model="gpt-3.5-turbo",
-    api_key=os.environ.get("KAMAL_LLM_OPENAI_API_KEY"),
+    api_key="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"
+    # api_key=os.environ.get("KAMAL_LLM_OPENAI_API_KEY"),
 )
 
 
